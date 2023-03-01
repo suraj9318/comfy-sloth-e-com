@@ -1,19 +1,33 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import notFound from '../assets/notFound.png'
 
 const ProductImages = ({images = [{url:''}]}) => {
   const [main,setMain] = useState(images[0]);
-
   const handleImages = (index) =>{
     setMain(images[index])
   }
 
+  function checkImage(url) {
+    var image = new Image();
+    image.onload = function() {
+      if (this.width > 0) {
+        return true
+      }
+    }
+    image.onerror = function() {
+      return false
+    }
+    image.src = url;
+  }
+
+
   return <Wrapper>
-    <img src={main.url} alt="main image" className='main'/>
+    <img src={checkImage(main.url) ? main.url : notFound} alt="main image" className='main'/>
     <div className='gallery'>
       {images.map((image,index)=>{
         return <img key={index} 
-        src={image.url}
+        src={checkImage(image.url) ?image.url : notFound }
         alt={image.filename} 
         onClick={()=>handleImages(index)} 
         className={`${image.url === main.url?'active':''}`}

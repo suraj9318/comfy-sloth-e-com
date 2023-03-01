@@ -4,6 +4,8 @@ import { formatPrice } from '../utils/helpers'
 import AmountButtons from './AmountButtons'
 import { FaTrash } from 'react-icons/fa'
 import { useCartContext } from '../context/cart_context'
+import notFound from '../assets/notFound.png'
+
 const CartItem = ({id,image,name,color,price,amount}) => {
   const {removeItem,toggleAmount} =useCartContext();
   const increase = () =>{
@@ -12,9 +14,25 @@ const CartItem = ({id,image,name,color,price,amount}) => {
   const decrease = () =>{
     toggleAmount(id,'dec')
   }
+
+  function checkImage(url) {
+    var image = new Image();
+    image.onload = function() {
+      if (this.width > 0) {
+        return true
+      }
+    }
+    image.onerror = function() {
+      return false
+    }
+    image.src = url;
+  }
+
+
+
   return <Wrapper>
     <div className='title'>
-      <img src={image} alt={name}/>
+      <img src={checkImage(image) ? image : notFound} alt={name}/>
       <div>
         <h5 className='name'>{name}</h5>
         <p className='color'> color : <span style={{backgound:color}}></span></p>

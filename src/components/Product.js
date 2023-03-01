@@ -3,12 +3,27 @@ import styled from 'styled-components'
 import { formatPrice } from '../utils/helpers'
 import { FaSearch } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
-
+import notFound from '../assets/notFound.png'
 const Product = ({image,name,id,price}) => {
 
+  function checkImage(url) {
+    var image = new Image();
+    image.onload = function() {
+      if (this.width > 0) {
+        return true
+      }
+    }
+    image.onerror = function() {
+      return false
+    }
+    image.src = url;
+  }
+
+  
+console.log(image)
   return <Wrapper>
     <div className='container'>
-        <img src={image} alt={name}/>
+        <img src={checkImage(image) ? image : notFound} alt={name}/>
         <Link to={`products/${id}`} className="link">
           <FaSearch/>
         </Link>
